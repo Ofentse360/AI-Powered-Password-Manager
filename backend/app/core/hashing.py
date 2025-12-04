@@ -11,6 +11,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class Hasher:
     """Handles hashing and verification of plain text passwords."""
 
+    #Used during regisrtration
     @staticmethod
     def verify_password(plain_password: str, hashed_password: str) -> bool:
         """
@@ -25,7 +26,7 @@ class Hasher:
         """
         # Bcrypt is designed to handle this comparison securely
         return pwd_context.verify(plain_password, hashed_password)
-
+    #use during login
     @staticmethod
     def get_password_hash(password: str) -> str:
         """
