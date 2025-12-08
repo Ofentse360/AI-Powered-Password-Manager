@@ -44,3 +44,20 @@ class TokenData(BaseModel):
     """
     user_id: Optional[int] = None
     username: Optional[str] = None
+
+
+# --- 5. User Response Schema (Output) ---
+class UserResponse(BaseModel):
+    """
+    Schema for sending user data back to the client.
+    Crucially, this excludes the password!
+    """
+    id: int
+    username: str
+    email: EmailStr
+    is_active: bool
+
+    class Config:
+        # This tells Pydantic to read the data even if it's not a dict,
+        # but a SQLAlchemy model (which is what our DB returns).
+        from_attributes = True
