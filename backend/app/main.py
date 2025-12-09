@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.database.init_db import init_database
-
+from app.api import auth, passwords 
 # --- 1. Import the new router ---
 from app.api import auth 
 
@@ -40,6 +40,7 @@ async def startup_event():
 # tags=["Authentication"] groups them nicely in the auto-generated docs
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 
+app.include_router(passwords.router, prefix="/api/passwords", tags=["Passwords"])
 # Health check endpoint
 @app.get("/")
 async def root():
