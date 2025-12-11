@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.database.session import get_db
 from app.models.user import User
-from app.schemas.password import PasswordCreate, PasswordUpdate, PasswordResponse
+from app.schema.password import PasswordCreate, PasswordUpdate, PasswordResponse
 from app.services.password_service import password_service
 from app.api.deps import get_current_user # Import the Bouncer!
 from app.core.security import encryption_manager
