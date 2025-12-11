@@ -4,7 +4,7 @@ Docstring for AI-Powered-Password-Manager.backend.app.api.security
 Securty Tools API endpoints
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status, body
+from fastapi import APIRouter, Depends, HTTPException, status, Body
 from pydantic import BaseModel
 
 from app.services.breach_checker import breach_checker 
@@ -24,7 +24,7 @@ class BreachResponse(BaseModel):
 
 @router.post("/check-password", reponse_model=BreachResponse)
 async def check_password_breach(
-    request: PasswordCheckRequest = body(...)
+    request: PasswordCheckRequest = Body(...)
 ):
     
     """Check If password exists in breach databases
