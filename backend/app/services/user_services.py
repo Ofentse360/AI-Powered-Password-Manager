@@ -60,3 +60,5 @@ class UserService:
         if not hasher.verify_master_password(master_password):
             return None
         return user
+    
+user_service = UserService()

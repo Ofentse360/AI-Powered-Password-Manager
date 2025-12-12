@@ -20,6 +20,7 @@ class UserRegister(BaseModel):
     master_password: str = Field(..., min_length=12, max_length=100)
 
 
+
 # --- 2. User Login Request Body (Input) ---
 class UserLogin(BaseModel):
     """

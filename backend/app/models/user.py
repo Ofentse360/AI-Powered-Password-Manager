@@ -5,8 +5,7 @@ User model definitions and database interactions
 
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from datetime import datetime
-from sqlachemy.orm import relationship
-
+from sqlalchemy.orm import relationship
 from app.database.session import Base
 
 from app.core.hashing import hasher

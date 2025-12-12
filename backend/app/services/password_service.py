@@ -5,7 +5,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from app.models.password_entry import PasswordEntry
-from app.schemas.password import PasswordCreate, PasswordUpdate
+from app.schema.password import PasswordCreate, PasswordUpdate
 from app.core.security import encryption_manager
 
 class PasswordService:
