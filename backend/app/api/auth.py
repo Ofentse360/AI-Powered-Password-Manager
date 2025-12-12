@@ -8,9 +8,9 @@ from sqlalchemy.orm import Session
 
 # Import our system components
 from app.database.session import get_db
-from app.services.user_service import user_service
+from app.services.user_services import user_service
 from app.core.jwt import create_access_token
-from app.schemas.auth import UserRegister, UserResponse, Token
+from app.schema.auth import UserRegister, UserResponse, Token
 from app.config import settings
 # Create the router (like a mini-app for auth routes)
 router = APIRouter()
