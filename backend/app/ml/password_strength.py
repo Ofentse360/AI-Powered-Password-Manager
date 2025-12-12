@@ -13,7 +13,7 @@ from pathlib import Path
 
 # Define path to the saved model 
 BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR / "password_strength_model.joblib"
+MODEL_PATH = BASE_DIR / "models" / "password_strength_v1.joblib"
 
 class PasswordStrengthModel:
     """Wrapper for the trained Random Forest Model"""
