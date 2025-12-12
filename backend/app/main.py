@@ -5,9 +5,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.database.init_db import init_database
-from app.api import auth, passwords, security
-# --- 1. Import the new router ---
-from app.api import auth 
+# Import API routers
+from app.api import auth, passwords, security, generator
 
 # Create FastAPI app
 app = FastAPI(
@@ -45,8 +44,8 @@ app.include_router(passwords.router, prefix="/api/passwords", tags=["Passwords"]
 
 # --- 4. Register the Security Tools router ---
 app.include_router(security.router, prefix="/api/security", tags=["Security Tools"])
-
-
+# --- 5. Register the Password Generator router ---
+app.include_router(generator.router, prefix="/api/generator", tags=["Generator"])
 # Health check endpoint
 @app.get("/")
 async def root():
