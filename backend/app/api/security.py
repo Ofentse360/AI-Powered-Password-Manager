@@ -1,6 +1,4 @@
 """
-Docstring for AI-Powered-Password-Manager.backend.app.api.security
-
 Securty Tools API endpoints
 """
 
@@ -34,7 +32,7 @@ class BreachResponse(BaseModel):
     breach_count: int
     message: str
 
-@router.post("/check-password", reponse_model=BreachResponse)
+@router.post("/check-password", response_model=BreachResponse)
 async def check_password_breach(
     request: PasswordCheckRequest = Body(...)
 ):

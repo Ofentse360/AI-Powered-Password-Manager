@@ -20,4 +20,6 @@ class EncryptionManager:
     def decrypt(self, ciphertext: str) -> str:
         return self.cipher.decrypt(ciphertext.encode()).decode()
     
-    # ... (generate_key static method)
+    # ... (generate_key static method)\\
+
+encryption_manager = EncryptionManager()

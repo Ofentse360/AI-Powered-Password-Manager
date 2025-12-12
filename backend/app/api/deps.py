@@ -9,7 +9,7 @@ from pydantic import ValidationError
 
 from app.database.session import get_db
 from app.core.jwt import decode_access_token
-from app.services.user_service import user_service
+from app.services.user_services import user_service
 from app.models.user import User
 from app.config import settings
 
