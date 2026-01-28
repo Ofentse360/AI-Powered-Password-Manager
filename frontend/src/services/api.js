@@ -1,52 +1,49 @@
 import axios from 'axios';
 
-// Create a base client
+// Use the environment variable we set in Docker (or default to localhost)
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000', 
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: API_URL,
 });
 
-// Helper to login
-export const loginUser = async (username, password) => {
-  // OAuth2 expects form-data, not JSON
-  const formData = new FormData();
-  formData.append('username', username);
+// --- AUTH SERVICES ---
+
+export const loginUser = async (email, password) => {
+  // 1. Convert to Form Data (Required by FastAPI OAuth2)
+  const formData = new URLSearchParams();
+  formData.append('username', email); // FastAPI expects 'username', even if it's an email
   formData.append('password', password);
 
-  const response = await api.post('/api/auth/token', formData);
-  return response.data; // Returns { access_token, token_type }
-};
-
-
-
-
-// Helper to register
-export const registerUser = async (email, password) => {
-  // The backend expects JSON for registration: { email: "...", password: "..." }
-  const response = await api.post('/api/auth/register', {
-    email: email,
-    password: password
+  // 2. Send as x-www-form-urlencoded
+  const response = await api.post('/api/auth/token', formData, {
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
   });
   return response.data;
 };
 
+export const registerUser = async (username, email, master_password) => {
+  // Registration expects JSON with username, email, and master_password
+  const response = await api.post('/api/auth/register', {
+    username,
+    email,
+    master_password
+  });
+  return response.data;
+};
 
+// --- PASSWORD SERVICES ---
 
 export const getPasswords = async () => {
-  const token = localStorage.getItem("token"); // Retrieve token
-  
+  const token = localStorage.getItem("token");
   const response = await api.get('/api/passwords/', {
-    headers: { Authorization: `Bearer ${token}` } // Send it to backend
+    headers: { Authorization: `Bearer ${token}` }
   });
   return response.data;
 };
 
-//  Add a new password
 export const createPassword = async (passwordData) => {
   const token = localStorage.getItem("token");
-  
   const response = await api.post('/api/passwords/', passwordData, {
     headers: { Authorization: `Bearer ${token}` }
   });
