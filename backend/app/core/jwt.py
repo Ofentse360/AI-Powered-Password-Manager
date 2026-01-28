@@ -42,7 +42,11 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 def decode_access_token(token: str):
     """
     Decodes and validates a JWT token.
-    Returns the payload dictionary or raises JWTError if invalid.
+    Returns the payload dictionary if valid, None if expired/invalid.
+    Handles:
+    - Expired tokens
+    - Invalid signatures
+    - Malformed tokens
     """
     try:
         payload = jwt.decode(
@@ -51,5 +55,12 @@ def decode_access_token(token: str):
             algorithms=[settings.JWT_ALGORITHM]
         )
         return payload
-    except JWTError:
+    except jwt.ExpiredSignatureError:
+        print("❌ Token has expired")
+        return None
+    except jwt.JWTClaimsError:
+        print("❌ Invalid token claims")
+        return None
+    except JWTError as e:
+        print(f"❌ Invalid token: {e}")
         return None
