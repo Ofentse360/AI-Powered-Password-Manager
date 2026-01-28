@@ -8,21 +8,27 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from app.config import settings
 
-# 1. Create the SQLAlchemy Engine
+# 1. Define connection arguments safely
+# PostgreSQL crashes if it sees "check_same_thread", so we only add it for SQLite.
+connect_args = {}
+
+if "sqlite" in settings.DATABASE_URL:
+    connect_args = {"check_same_thread": False}
+
+# 2. Create the SQLAlchemy Engine
 engine = create_engine(
     settings.DATABASE_URL, 
-    connect_args={"check_same_thread": False}
+    connect_args=connect_args  # Uses the variable we just defined
 )
 
-# 2. Create Session Factory
-SessionLocal =  sessionmaker(autocommit=False, autoflush=False, bind=engine)
+# 3. Create Session Factory
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# 3. Base class for declarative models
+# 4. Base class for declarative models
 Base = declarative_base()
 
-#4. Dependency to get DB session
+# 5. Dependency to get DB session
 def get_db():
-    """Yields a database session for use in request handling."""
     db = SessionLocal()
     try:
         yield db
