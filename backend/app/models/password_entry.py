@@ -28,6 +28,9 @@ class PasswordEntry(Base):
     # 4. Link to the User (The Foreign Key)
     # This says: "This entry belongs to the user with this ID"
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    
+    # Relationship back to User model
+    owner = relationship("User", back_populates="passwords")
 
     # 5. Timestamps
     created_at = Column(DateTime, default=datetime.utcnow)
