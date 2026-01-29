@@ -11,7 +11,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class Hasher:
     """Handles hashing and verification of plain text passwords."""
 
-    #Used during regisrtration
     @staticmethod
     def verify_password(plain_password: str, hashed_password: str) -> bool:
         """
@@ -26,20 +25,16 @@ class Hasher:
         """
         # Bcrypt is designed to handle this comparison securely
         return pwd_context.verify(plain_password, hashed_password)
-    #use during login
+    
+    # Alias for clarity - used when verifying master passwords
     @staticmethod
-    def get_password_hash(password: str) -> str:
+    def verify_master_password(plain_password: str, hashed_password: str) -> bool:
         """
-        Generates a secure hash for a plain text password.
-        
-        Args:
-            password: The password to hash (e.g., the Master Password during registration).
-            
-        Returns:
-            The securely generated hash string.
+        Alias for verify_password. Specifically for master password verification.
+        Used to make code intent clearer.
         """
-        return pwd_context.hash(password)
-
+        return Hasher.verify_password(plain_password, hashed_password)
+    
 # Export the instance for easy import in other modules
 hasher = Hasher()
 
