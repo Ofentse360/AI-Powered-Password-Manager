@@ -56,16 +56,16 @@ def login_for_access_token(
     """
     Authenticate user and return JWT token.
     
-    1. Verify username and password.
+    1. Verify username and master password.
     2. Create JWT token with expiration.
     3. Return token and token type.
     """
     
-    # 1. Authenticate user
+    # 1. Authenticate user (using master_password parameter name)
     user = user_service.authenticate_user(
         db, 
         username=form_data.username, 
-        password=form_data.password
+        master_password=form_data.password
     )
     if not user:
         raise HTTPException(
@@ -74,10 +74,10 @@ def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    # 2. Create JWT token
+    # 2. Create JWT token (use username as the 'sub' claim for better tracking)
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": str(user.id)}, 
+        data={"sub": user.username}, 
         expires_delta=access_token_expires
     )
     

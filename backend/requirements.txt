@@ -13,3 +13,4 @@ joblib
 numpy
 python-multipart
 email-validator
+psycopg2-binary
