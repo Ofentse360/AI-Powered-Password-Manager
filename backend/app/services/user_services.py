@@ -9,11 +9,13 @@ from app.core.hashing import hasher
 
 class UserService:
     """Services class for managing CRUD operations """
+    
     @staticmethod
     def get_user_by_email(db: Session, email: str):
         """Fetch a user by email"""
         return db.query(User).filter(User.email == email).first()
     
+    @staticmethod
     def get_user_by_username(db: Session, username: str):
         """Fetch a user by username"""
         return db.query(User).filter(User.username == username).first()
@@ -27,25 +29,29 @@ class UserService:
         2. Creates the User database object.
         3. Saves it to the database.
         """
-        # 1. Hash the password using our security utility
-        hashed_password = hasher.get_password_hash(user_in.master_password)
-        
-        # 2. Create the User model instance
-        db_user = User(
-            email=user_in.email,
-            username=user_in.username,
-            hashed_password=hashed_password
-            # is_active and is_superuser default to standard values defined in the Model
-        )
-        
-        # 3. Add to the session and commit (save)
-        db.add(db_user)
-        db.commit()
-        
-        # Refresh to get the ID and default values (like created_at) from the DB
-        db.refresh(db_user)
-        
-        return db_user
+        try:
+            # 1. Hash the password using our security utility
+            hashed_password = hasher.get_password_hash(user_in.master_password)
+            
+            # 2. Create the User model instance
+            db_user = User(
+                email=user_in.email,
+                username=user_in.username,
+                hashed_master_password=hashed_password  # FIXED: was hashed_password
+                # is_active and is_superuser default to standard values defined in the Model
+            )
+            
+            # 3. Add to the session and commit (save)
+            db.add(db_user)
+            db.commit()
+            
+            # Refresh to get the ID and default values (like created_at) from the DB
+            db.refresh(db_user)
+            
+            return db_user
+        except Exception as e:
+            db.rollback()
+            raise Exception(f"Failed to create user: {str(e)}")
     
     @staticmethod
     def authenticate_user(db: Session, username: str, master_password: str):
@@ -57,7 +63,8 @@ class UserService:
         user = UserService.get_user_by_username(db, username)
         if not user:
             return None
-        if not hasher.verify_master_password(master_password):
+        # FIXED: Should verify against stored hash, not just the password
+        if not user.verify_master_password(master_password):
             return None
         return user
     
